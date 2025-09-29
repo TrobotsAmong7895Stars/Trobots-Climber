@@ -4,13 +4,13 @@
 
 package frc.robot.commands;
 
-import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.ClimberSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 
 public final class Autos {
   /** Example static factory for an autonomous command. */
-  public static Command exampleAuto(IntakeSubsystem subsystem) {
+  public static Command exampleAuto(ClimberSubsystem subsystem) {
     return null;
   }
 
