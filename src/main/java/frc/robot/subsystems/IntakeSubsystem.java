@@ -18,13 +18,13 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class ExampleSubsystem extends SubsystemBase {
+public class IntakeSubsystem extends SubsystemBase {
   private final SparkMax intakeLeader;
   private final SparkMax intakeFollower;
   private Debouncer currentDebounce = new Debouncer(0.1, Debouncer.DebounceType.kRising);
 
   /** Creates a new ExampleSubsystem. */
-  public ExampleSubsystem() {
+  public IntakeSubsystem() {
     intakeLeader = new SparkMax(10, MotorType.kBrushed);
 
     intakeFollower = new SparkMax(11, MotorType.kBrushed);
