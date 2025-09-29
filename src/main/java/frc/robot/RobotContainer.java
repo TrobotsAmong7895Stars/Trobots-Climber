@@ -6,7 +6,6 @@ package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Autos;
-import frc.robot.commands.ExampleCommand;
 import frc.robot.subsystems.ClimberSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -42,8 +41,8 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    m_driverController.b().whileTrue(climberSubsystem.intakeCommand());
-    m_driverController.a().whileTrue(climberSubsystem.outtakeCommand());
+    m_driverController.b().whileTrue(climberSubsystem.raiseClimber());
+    m_driverController.a().whileTrue(climberSubsystem.lowerClimber());
   }
 
   /**

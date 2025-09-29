@@ -11,23 +11,19 @@ import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 
-import edu.wpi.first.math.filter.Debouncer;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class ClimberSubsystem extends SubsystemBase {
-  private final SparkMax intakeLeader;
-  private final SparkMax intakeFollower;
-  private Debouncer currentDebounce = new Debouncer(0.1, Debouncer.DebounceType.kRising);
+  private final SparkMax climberLeader;
+  private final SparkMax climberFollower;
 
   /** Creates a new ExampleSubsystem. */
   public ClimberSubsystem() {
-    intakeLeader = new SparkMax(10, MotorType.kBrushed);
+    climberLeader = new SparkMax(14, MotorType.kBrushless);
 
-    intakeFollower = new SparkMax(11, MotorType.kBrushed);
+    climberFollower = new SparkMax(13, MotorType.kBrushless);
 
     SparkMaxConfig globalConfig = new SparkMaxConfig();
     SparkMaxConfig followerConfig = new SparkMaxConfig();
@@ -38,41 +34,32 @@ public class ClimberSubsystem extends SubsystemBase {
 
     followerConfig
       .apply(globalConfig)
-      .follow(intakeLeader)
-      .inverted(true);
+      .follow(climberLeader)
+      .inverted(false);
 
-    intakeLeader.configure(globalConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-    intakeFollower.configure(followerConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    climberLeader.configure(globalConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    climberFollower.configure(followerConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
   }
 
   public void setSpeed(double speed) {
-    intakeLeader.set(speed);
+    climberLeader.set(speed);
   }
 
   public void stop() {
-    intakeLeader.set(0);
+    climberLeader.set(0);
   }
 
-  public boolean isGamePieceIn() {
-    return currentDebounce.calculate(intakeLeader.getOutputCurrent() >= 40.0);
+
+  public Command raiseClimber() {
+    return Commands.run(() -> this.setSpeed(1.0)).finallyDo(() -> this.stop());
   }
 
-  public Command intakeCommand() {
-    return new RunCommand(() -> setSpeed(-1.0), this) {
-      @Override
-      public boolean isFinished() {
-        return isGamePieceIn();
-      }
-    }.finallyDo((interrupted) -> stop());
-  }
-
-  public Command outtakeCommand() {
-    return Commands.run(() -> this.setSpeed(1.0)). finallyDo(() -> this.stop());
+  public Command lowerClimber() {
+    return Commands.run(() -> this.setSpeed(-1.0)). finallyDo(() -> this.stop());
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putBoolean("Has Game Piece", isGamePieceIn());
   }
 }
